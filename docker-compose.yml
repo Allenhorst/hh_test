@@ -33,6 +33,15 @@ services:
       - web_network
     depends_on: 
       - gentelella
+  server:
+    restart: always
+    build:
+      context: .
+      dockerfile: DockerfileServer
+    expose:
+      - 10008
+    networks:
+      - db_network      
 networks:
   db_network:
     driver: bridge

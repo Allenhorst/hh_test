@@ -1,10 +1,53 @@
 import socket
-
-from server.СreateDatabase import *
-from server.ModelTable import MessageETHContactID
 import time
 import datetime
 from sqlalchemy.orm import sessionmaker
+
+
+class MessageETHContactID(db.Model):
+    __tablename__ = "Message_ETH_ContactID"
+
+    id = Column(Integer, primary_key=True)
+    message = Column(String(120))
+    user_id = Column(Integer)
+    device_uid_id = Column(String(120))
+    object_number = Column(Integer)
+    type_message = Column(Integer)
+    contact_code = Column(Integer)
+    razdel_number = Column(Integer)
+    zone_number = Column(Integer)
+    time_stamp = Column(String(120))
+
+    def fill_class(self, message, user_id, device_uid_id, object_number, type_message, contact_code, razdel_number,
+                   zone_number, time_stamp):
+        self.message = message
+        self.user_id = user_id
+        self.device_uid_id = device_uid_id
+        self.object_number = object_number
+        self.type_message = type_message
+        self.contact_code = contact_code
+        self.razdel_number = razdel_number
+        self.zone_number = zone_number
+        self.time_stamp = time_stamp
+
+    def __init__(self, **kwargs):
+        for attribute, value in kwargs.items():
+            # depending on whether value is an iterable or not, we must
+            # unpack it's value (when **kwargs is request.form, some values
+            # will be a 1-element list)
+            if hasattr(value, '__iter__') and not isinstance(value, str):
+                # the ,= unpack of a singleton fails PEP8 (travis flake8 test)
+                value = value[0]
+            setattr(self, attribute, value)
+
+    def __repr__(self):
+        return self
+
+    def to_json(self):
+        return json.dumps(self, cls=AlchemyEncoder)
+
+
+
 
 host = '0.0.0.0'
 port = 10008

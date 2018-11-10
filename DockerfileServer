@@ -1,0 +1,12 @@
+FROM python:3.6
+
+ENV PORT 10008
+
+COPY ContactDecoder.py ./
+
+RUN pip install SQLAlchemy
+
+EXPOSE 10008
+CMD ["python" "./ContactDecoder.py"]
+
+
