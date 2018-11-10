@@ -7,6 +7,6 @@ COPY ./server/ContactDecoder.py ./
 RUN pip install SQLAlchemy
 
 EXPOSE 10008
-CMD ["python" "./ContactDecoder.py"]
+CMD ["python ./ContactDecoder.py"]
 
 
