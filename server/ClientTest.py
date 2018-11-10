@@ -1,7 +1,7 @@
 import socket
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.connect(('127.0.0.1', 10008))
+sock.connect(('52.59.232.90', 10008))
 
 i = 2
 while i:
