@@ -100,8 +100,9 @@ while True:
                 razdel_number = int(data[15:17])
                 zone_number = int(data[17:20])
                 time_stamp = datetime.datetime.fromtimestamp(time.time()).strftime('%d-%m-%Y %H:%M:%S')
+                ab = Message_ETH_ContactID()
                 message_eth_contactID = \
-                    MessageETHContactID(data, 1, 0,
+                    ab.fill_class(data, 1, 0,
                                         object_number, type_message, contact_code, razdel_number,
                                         zone_number, time_stamp)
                 #  Отправка в бд
