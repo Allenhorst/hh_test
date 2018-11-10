@@ -1,0 +1,214 @@
+﻿{% extends "base_site.html" %}
+
+{% block title %} Form Wizards {% endblock title %}
+
+{% block content %}
+<div class="right_col" role="main">
+    <div class="">
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Редактировать существующий объект </h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+
+                        <!-- Smart Wizard -->
+                        <p>Заполните необходимые поля и подтвердите изменение объекта</p>
+                        <div id="wizard" class="form_wizard wizard_horizontal">
+                            <ul class="wizard_steps">
+                                <li>
+                                    <a href="#step-1">
+                                        <span class="step_no">1</span>
+                                        <span class="step_descr">
+                                            Шаг 1<br/>
+                                            <small>Номер объекта</small>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#step-2">
+                                        <span class="step_no">2</span>
+                                        <span class="step_descr">
+                                            Шаг 2<br/>
+                                            <small>Подтверждение добавления объекта</small>
+                                        </span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                            <div id="step-1">
+                                <form class="form-horizontal form-label-left">
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                                            Номер объекта <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input type="text" id="first-name" name="id_object" required="required"
+                                                   class="form-control col-md-7 col-xs-12">
+                                        </div>
+                                    </div>
+
+
+                                </form>
+
+                            </div>
+                            <div id="step-2">
+                                <h2 class="StepTitle" style="text-align:center">Если всё заполнили правильно, Нажмите
+                                    подтвердить!</h2>
+                                <form class="form-horizontal form-label-left">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                                            Имя объекта <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input type="text" id="last-name" name="name_object" required="required"
+                                                   class="form-control col-md-7 col-xs-12">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                                            Широта <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input type="text" id="last-name" name="lat" required="required"
+                                                   class="form-control col-md-7 col-xs-12">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">
+                                            Долгота <span class="required">*</span>
+                                        </label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <input type="text" id="last-name" name="lon" required="required"
+                                                   class="form-control col-md-7 col-xs-12">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Обслуживается</label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <div id="gender" class="btn-group" data-toggle="buttons">
+                                                <label class="btn btn-round btn-success" data-toggle-class="btn-primary"
+                                                       data-toggle-passive-class="btn-default">
+                                                    <input type="radio" name="Enabled" value="1"> Да
+                                                </label>
+                                                <label class="btn btn-round btn-warning" data-toggle-class="btn-primary"
+                                                       data-toggle-passive-class="btn-default">
+                                                    <input type="radio" name="Enabled" value="0"> Нет
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+
+
+                        </div>
+                        <!-- End SmartWizard Content -->
+                        <!-- End SmartWizard Content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+{{ super()}}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Smart Wizard
+        $('#wizard').smartWizard({
+            onFinish: onFinishCallback,
+            onShowStep: onLeaveStep,
+            labelNext: 'Далее',
+            labelPrevious: 'Назад',
+            labelFinish: 'Подтвердить'
+        });
+
+        // Initialize the leaveStep event
+        $("#smartwizard").on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
+            return confirm("Do you want to leave the step " + stepNumber + "?");
+        });
+
+    });
+
+    function onLeaveStep(e, anchorObject, stepNumber, stepDirection) {
+        if (e['0'].childNodes[1].innerText == '2') {
+            $.ajax({
+                type: 'POST',
+                url: '/home/GetObject',
+                data: $('form').serializeJSON(),
+                dataType: 'json',
+                cache: false,
+                success: function (msg) {
+                    if (msg.length == 0) {
+                        alert("Объект ненайден!");
+                        return;
+                    }
+                    $("[name='name_object']").val(msg['0'].Name);
+                    $("[name='lat']").val(msg['0'].lat);
+                    $("[name='lon']").val(msg['0'].lon);
+                    if (msg['0'].Enabled == '1') {
+                        $("[name='Enabled']").val('1');
+                    }
+                    else {
+                        $("[name='Enabled']").val('0');
+                    }
+                    $('#wizard').smartWizard('goForward');
+                    alert("Объект найден!");
+                }
+            });
+        }
+
+    }
+
+    function onFinishCallback() {
+        //console.log(JSON.stringify($('#wizard').find('select, textarea, input').serializeArray()));
+        $.ajax({
+            type: 'POST',
+            url: '/home/Add',
+            data: $('form').serializeJSON(),
+            //data: JSON.stringify($('#wizard').find('select, textarea, input').serializeArray()),
+            dataType: 'json',
+            cache: false,
+            success: function () {
+                alert("Объект добавлен!");
+                /*$("#editPage").jqmHide();*/
+            }
+
+        });
+    }
+
+    function objectifyForm(formArray) {//serialize data function
+
+        var returnArray = {};
+        for (var i = 0; i < formArray.length; i++) {
+            returnArray[formArray[i]['name']] = formArray[i]['value'];
+        }
+        return returnArray;
+    }
+</script>
+
+<!-- jQuery Smart Wizard -->
+<script src="{{ url_for('static', filename='vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js') }}"></script>
+<script src="{{ url_for('static', filename='vendors/jquery.serializejson.js') }}"></script>
+{% endblock javascripts %}
