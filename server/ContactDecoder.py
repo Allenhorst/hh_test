@@ -2,9 +2,13 @@ import socket
 import time
 import datetime
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, Integer, String, BLOB, REAL
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import DeclarativeMeta
+from sqlalchemy import MetaData, create_engine
 
 
-class MessageETHContactID(db.Model):
+class MessageETHContactID():
     __tablename__ = "Message_ETH_ContactID"
 
     id = Column(Integer, primary_key=True)
@@ -56,6 +60,16 @@ serv_sock.bind((host, port))
 serv_sock.listen(10)
 """:param backlog - размер очереди входящих подключений"""
 
+
+SQLALCHEMY_DATABASE_URI = 'postgresql://{}:{}@{}:{}/{}'.format(
+        environ.get('GENTELELLA_DATABASE_USER', 'postgres'),
+        environ.get('GENTELELLA_DATABASE_PASSWORD', 'postgres'),
+        environ.get('GENTELELLA_DATABASE_HOST', 'db'),
+        environ.get('GENTELELLA_DATABASE_PORT', 5432),
+        environ.get('GENTELELLA_DATABASE_NAME', 'ivs')
+    )
+
+engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=False)
 Session = sessionmaker(bind=engine)
 session = Session()
 
