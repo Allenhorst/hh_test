@@ -8,8 +8,9 @@ from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy import MetaData, create_engine
 from os import environ
 
+Base = declarative_base()
 
-class MessageETHContactID():
+class MessageETHContactID(Base):
     __tablename__ = "Message_ETH_ContactID"
 
     id = Column(Integer, primary_key=True)
