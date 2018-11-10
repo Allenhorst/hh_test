@@ -40,6 +40,8 @@ services:
       dockerfile: DockerfileServer
     expose:
       - 10008
+    ports:
+      - "10008:10008"
     networks:
       - db_network      
 networks:
