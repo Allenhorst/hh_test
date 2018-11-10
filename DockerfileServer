@@ -2,7 +2,7 @@ FROM python:3.6
 
 ENV PORT 10008
 
-COPY ./server/ContactDecoder.py ./
+COPY /server/ContactDecoder.py ./
 
 RUN pip install SQLAlchemy
 
